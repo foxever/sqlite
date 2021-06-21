@@ -1,37 +1,16 @@
 package sqlite
 
 import (
-	"database/sql"
 	"fmt"
 	"testing"
 
-	"github.com/mattn/go-sqlite3"
 	"gorm.io/gorm"
+	_ "modernc.org/sqlite"
 )
 
 func TestDialector(t *testing.T) {
 	// This is the DSN of the in-memory SQLite database for these tests.
 	const InMemoryDSN = "file:testdatabase?mode=memory&cache=shared"
-	// This is the custom SQLite driver name.
-	const CustomDriverName = "my_custom_driver"
-
-	// Register the custom SQlite3 driver.
-	// It will have one custom function called "my_custom_function".
-	sql.Register(CustomDriverName,
-		&sqlite3.SQLiteDriver{
-			ConnectHook: func(conn *sqlite3.SQLiteConn) error {
-				// Define the `concat` function, since we use this elsewhere.
-				err := conn.RegisterFunc(
-					"my_custom_function",
-					func(arguments ...interface{}) (string, error) {
-						return "my-result", nil // Return a string value.
-					},
-					true,
-				)
-				return err
-			},
-		},
-	)
 
 	rows := []struct {
 		description  string
@@ -76,26 +55,6 @@ func TestDialector(t *testing.T) {
 			openSuccess:  true,
 			query:        "SELECT my_custom_function()",
 			querySuccess: false,
-		},
-		{
-			description: "Custom driver",
-			dialector: &Dialector{
-				DriverName: CustomDriverName,
-				DSN:        InMemoryDSN,
-			},
-			openSuccess:  true,
-			query:        "SELECT 1",
-			querySuccess: true,
-		},
-		{
-			description: "Custom driver, custom function",
-			dialector: &Dialector{
-				DriverName: CustomDriverName,
-				DSN:        InMemoryDSN,
-			},
-			openSuccess:  true,
-			query:        "SELECT my_custom_function()",
-			querySuccess: true,
 		},
 	}
 	for rowIndex, row := range rows {
