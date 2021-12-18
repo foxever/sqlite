@@ -5,5 +5,5 @@ go 1.14
 require (
 	github.com/stretchr/testify v1.7.0
 	gorm.io/gorm v1.22.4
-	modernc.org/sqlite v1.14.2
+	modernc.org/sqlite v1.14.3
 )
