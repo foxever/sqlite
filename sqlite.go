@@ -6,14 +6,13 @@ import (
 	"strconv"
 	"strings"
 
-	_ "modernc.org/sqlite"
-
 	"gorm.io/gorm"
 	"gorm.io/gorm/callbacks"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/migrator"
 	"gorm.io/gorm/schema"
+	_ "modernc.org/sqlite"
 )
 
 // DriverName is the default driver name for SQLite.
@@ -101,10 +100,12 @@ func (dialector Dialector) ClauseBuilders() map[string]clause.ClauseBuilder {
 					if limit.Limit <= 0 {
 						limit.Limit = -1
 					}
-					builder.WriteString("LIMIT " + strconv.Itoa(limit.Limit))
+					builder.WriteString("LIMIT ")
+					builder.WriteString(strconv.Itoa(limit.Limit))
 				}
 				if limit.Offset > 0 {
-					builder.WriteString(" OFFSET " + strconv.Itoa(limit.Offset))
+					builder.WriteString(" OFFSET ")
+					builder.WriteString(strconv.Itoa(limit.Offset))
 				}
 			}
 		},
