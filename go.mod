@@ -1,9 +1,9 @@
 module github.com/foxever/sqlite
 
-go 1.14
+go 1.16
 
 require (
-	github.com/stretchr/testify v1.7.4
-	gorm.io/gorm v1.23.5
-	modernc.org/sqlite v1.17.3
+	github.com/stretchr/testify v1.8.0
+	gorm.io/gorm v1.23.8
+	modernc.org/sqlite v1.18.0
 )
